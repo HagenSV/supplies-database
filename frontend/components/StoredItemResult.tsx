@@ -24,7 +24,6 @@ export default function StoredItemResult({ storedItem }: Props){
         const container = await ContainerStore.getContainer(storedItem.container_id);
 
         if (!container) return;
-        console.log(container)
 
         const location = await LocationStore.getLocation(container.location_id);
 

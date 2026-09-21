@@ -1,0 +1,27 @@
+Items
+
+GET /items?name=${search}
+POST /items
+GET /items/${id}
+DELETE /items/${id}
+
+Location
+
+GET /locations?name=${search}
+POST /locations
+GET /locations/${id}
+DELETE /locations/${id}
+
+Category
+
+GET /categories?name=${search}
+POST /categories
+GET /categories/${id}
+DELETE /categories/${id}
+
+StoredItem
+
+GET /stored-items?item=${item_id}&category=${category_id}
+POST /stored-items
+GET /stored-items/${id}
+DELETE /stored-items/${id}

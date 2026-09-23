@@ -1,6 +1,5 @@
 package dev.hagensv.api.controllers;
 
-import dev.hagensv.data.CategoryDBO;
 import dev.hagensv.data.ContainerDBO;
 import dev.hagensv.data.access.ContainerRepository;
 import org.springframework.web.bind.annotation.*;
@@ -18,14 +17,14 @@ public class ContainerController {
 
     @GetMapping()
     public List<ContainerDBO> getContainers(@RequestParam(required = false) Long location){
-        if (location == null)
+        if (location == null || location == 0)
             return containerRepository.getAll();
 
         return containerRepository.searchByLocation(location);
     }
 
     @PostMapping()
-    public ContainerDBO createtContainer(@RequestBody ContainerDBO newLocation){
+    public ContainerDBO createContainer(@RequestBody ContainerDBO newLocation){
         return containerRepository.create(newLocation);
     }
 

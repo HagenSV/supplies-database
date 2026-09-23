@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import GlobalContext from "@/context/global-context";
+import { ThemeProvider } from "@mui/material/styles";
+import { theme } from "@/context/theme";
 
 
 export const metadata: Metadata = {
@@ -15,11 +17,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col p-6">
+      <body className="min-h-full flex flex-col p-6 bg-lime-50">
         <AppRouterCacheProvider>
+          <ThemeProvider theme={theme}>
           <GlobalContext>
             {children}
           </GlobalContext>
+          </ThemeProvider>
         </AppRouterCacheProvider>
       </body>
     </html>

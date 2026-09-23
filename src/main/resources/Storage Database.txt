@@ -1,0 +1,49 @@
+Tables
+
+Location
+location_id: long
+location_name: string
+
+Category
+category_id: long
+category_name: string
+
+Item
+item_id: long
+item_name: string
+category_id?: FK Category
+
+Bin
+bin_id: long
+location_id: FK Location
+
+StoredItem
+stored_item_id: long
+item_id: FK Item
+bin_id: FK Bin
+quantity: int
+
+Tables
+
+Location
+location_id: integer
+location_name: string
+
+Category
+category_id: integer
+category_name: string
+
+Item
+item_id: integer
+item_name: string
+category_id?: FK Category
+
+Container
+container_id: integer
+location_id: FK Location
+
+StoredItem
+stored_item_id: integer
+item_id: FK Item
+container_id: FK Container
+quantity: integer

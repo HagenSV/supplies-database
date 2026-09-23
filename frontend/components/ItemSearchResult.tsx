@@ -4,7 +4,7 @@ import StoredItemApi from "@/api/stored-item-api";
 import { Item } from "@/data/item";
 import { StoredItem } from "@/data/stored_item";
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
-import { Box, Typography } from "@mui/material";
+import { Box, Divider, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import StoredItemResult from "./StoredItemResult";
 import { useCategoryStore } from "@/context/category-store-provider";
@@ -55,20 +55,28 @@ export default function ItemSearchResult({ item }: Props) {
     }
 
 
-    return <Box className="border-t border-b p-3">
+    return <Box className="p-3">
         <Box onClick={onClick}>
-            <Typography variant="body1" className="text-bold">{ item.item_name }</Typography>
-            <Typography>Category: { category?.category_name ?? "Uncategorized" }</Typography>
-            { open && <ArrowDropUp fontSize="large" /> }
-            { !open && <ArrowDropDown fontSize="large" /> }
+            <Stack direction="row" sx={{ justifyContent: "space-between"}}>
+                <Box>
+                    <Typography variant="body1" className="font-bold">{ item.item_name }</Typography>
+                    <Typography>Category: { category?.category_name ?? "Uncategorized" }</Typography>
+                  </Box>
+                { open && <ArrowDropUp fontSize="large" /> }
+                { !open && <ArrowDropDown fontSize="large" /> }
+            </Stack>
         </Box>
-        <Box className={`${open ? "block" : "hidden"}`}>
+        <Stack
+            direction="column"
+            divider={<Divider orientation="horizontal" flexItem/>} 
+            className={`${open ? "block" : "hidden"} pt-5 px-5`}
+        >
             { loading == LoadState.LOADING &&
                 <Typography variant="body2">Loading...</Typography>
             }
             { loading == LoadState.FINISHED && 
                 children.map( stored => <StoredItemResult key={stored.stored_item_id} storedItem={stored}/>)
             }
-        </Box>
+        </Stack>
     </Box>
 }

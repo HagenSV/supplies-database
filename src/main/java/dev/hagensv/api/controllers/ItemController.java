@@ -16,8 +16,10 @@ public class ItemController {
     }
 
     @GetMapping()
-    public List<ItemDBO> getItems(){
-        return itemRepository.getAll();
+    public List<ItemDBO> getItems(@RequestParam(required = false) String name){
+        if (name == null || name.isBlank()) return itemRepository.getAll();
+
+        return itemRepository.searchByName(name);
     }
 
     @PostMapping()

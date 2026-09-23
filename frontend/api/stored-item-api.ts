@@ -24,4 +24,16 @@ export default class StoredItemApi {
         return json;
     }
 
+    static async createStoredItem(newItem: Omit<StoredItem, "stored_item_id">){
+        const response = await fetch(`${API_BASE_URL}/api/v1/stored-items`,{
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newItem)
+        })
+
+        return response;
+    }
+
 }

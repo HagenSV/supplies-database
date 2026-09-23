@@ -31,7 +31,7 @@ export default function StoredItemResult({ storedItem }: Props){
     }
 
 
-    return <Box>
+    return <Box className="p-3">
         <Typography>Item</Typography>
         <Typography>Box: { storedItem.container_id }, Location: { location?.location_name ?? "Unknown" }</Typography>
         <Typography>Quantity: {storedItem.quantity}</Typography>

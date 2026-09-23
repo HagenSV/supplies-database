@@ -1,6 +1,7 @@
 package dev.hagensv.data.access;
 
 import dev.hagensv.data.ContainerDBO;
+import dev.hagensv.data.LocationDBO;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -18,6 +19,14 @@ public class ContainerRepository {
             rs.getLong("location_id")
     );
 
+    private static final RowMapper<ContainerDBO> DEEP_CONTAINER_DBO_ROW_MAPPER = (ResultSet rs, int _) -> new ContainerDBO(
+            rs.getLong("container_id"),
+            new LocationDBO(
+                rs.getLong("location_id"),
+                rs.getString("location_name")
+            )
+    );
+
     public ContainerRepository(JdbcTemplate jdbc){
         this.jdbc = jdbc;
     }
@@ -26,8 +35,10 @@ public class ContainerRepository {
         return jdbc.query("""
                 SELECT *
                 FROM Container
+                LEFT JOIN Location
+                ON Container.location_id = Location.location_id
             """,
-                CONTAINER_DBO_ROW_MAPPER
+                DEEP_CONTAINER_DBO_ROW_MAPPER
         );
     }
 
@@ -38,7 +49,7 @@ public class ContainerRepository {
                 RETURNING *
             """,
                 CONTAINER_DBO_ROW_MAPPER,
-                newContainer.getLocation()
+                newContainer.getLocationId()
         );
     }
 

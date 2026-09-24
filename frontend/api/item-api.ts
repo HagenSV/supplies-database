@@ -23,4 +23,34 @@ export default class ItemApi {
         return json;
     }
 
+    static async create(item: Omit<Item,"item_id">){
+        const response = await fetch(`${API_BASE_URL}/api/v1/items`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": 'application/json'
+                },
+                body: JSON.stringify(item)
+            }
+        );
+        const json = await response.json() as Item;
+        return json;
+    }
+
+    static async update(item: Item){
+        const response = await fetch(`${API_BASE_URL}/api/v1/items/${item.item_id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": 'application/json'
+                },
+                body: JSON.stringify(item)
+            }
+        )
+    }
+
+    static async delete(id: number){
+        const response = await fetch(`${API_BASE_URL}/api/v1/items/${id}`, {
+                method: "DELETE",
+            }
+        )
+    }
 }

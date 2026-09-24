@@ -4,6 +4,7 @@ import dev.hagensv.data.ItemDBO;
 import dev.hagensv.data.access.ItemRepository;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.Path;
 import java.util.List;
 
 @RestController
@@ -30,6 +31,11 @@ public class ItemController {
     @GetMapping("/{id}")
     public ItemDBO getItem(@PathVariable Long id){
         return itemRepository.getById(id);
+    }
+
+    @PutMapping("/{id}")
+    public void updateItem(@PathVariable Long id, @RequestBody ItemDBO item){
+        itemRepository.update(id, item);
     }
 
     @DeleteMapping("/{id}")

@@ -33,6 +33,11 @@ public class CategoryController {
         return categoryRepository.getById(id);
     }
 
+    @PutMapping("/{id}")
+    public void updateCategory(@PathVariable Long id, @RequestBody CategoryDBO category){
+        categoryRepository.update(id, category);
+    }
+
     @DeleteMapping("/{id}")
     public void deleteCategory(@PathVariable Long id){
         categoryRepository.deleteById(id);

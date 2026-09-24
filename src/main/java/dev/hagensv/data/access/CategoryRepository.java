@@ -53,6 +53,17 @@ public class CategoryRepository {
         );
     }
 
+    public void update(Long id, CategoryDBO update){
+        jdbc.update("""
+                UPDATE Category
+                SET category_name = ?
+                WHERE category_id = ?
+            """,
+            update.getName(),
+            id
+        );
+    }
+
     public List<CategoryDBO> searchByName(String searchQuery){
         return jdbc.query("""
                 SELECT *

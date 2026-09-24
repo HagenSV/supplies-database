@@ -1,5 +1,6 @@
 package dev.hagensv.data.access;
 
+import dev.hagensv.data.CategoryDBO;
 import dev.hagensv.data.ItemDBO;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -63,6 +64,18 @@ public class ItemRepository {
             """,
             ITEM_DBO_ROW_MAPPER,
             "%"+searchQuery+"%"
+        );
+    }
+
+    public void update(Long id, ItemDBO update){
+        jdbc.update("""
+                UPDATE Item
+                SET item_name = ?, category_id = ?
+                WHERE item_id = ?
+            """,
+                update.getName(),
+                update.getCategoryId(),
+                id
         );
     }
 

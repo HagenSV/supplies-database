@@ -41,7 +41,7 @@ export default function ItemsTable(){
     }
     
     return <Box>
-        <Typography variant="h1">Items</Typography>
+        <Typography variant="h1">Manage Items</Typography>
         <Button variant="contained" onClick={createItem}>Create</Button>
         <Stack direction="column" divider={<Divider orientation="horizontal" flexItem/>}>
             { items.map( item => 

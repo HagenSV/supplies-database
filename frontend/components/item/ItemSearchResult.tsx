@@ -6,7 +6,7 @@ import { StoredItem } from "@/data/stored_item";
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import { Box, Divider, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import StoredItemResult from "./StoredItemResult";
+import StoredItemResult from "../StoredItemResult";
 import { useCategoryStore } from "@/context/category-store-provider";
 import { Category } from "@/data/category";
 
@@ -40,9 +40,7 @@ export default function ItemSearchResult({ item }: Props) {
 
     const loadItems = async () => {
         const items = await StoredItemApi.getStoredItemByItem(item.item_id);
-        
         setChildren(items);
-        
         setLoading(LoadState.FINISHED);
     }
 

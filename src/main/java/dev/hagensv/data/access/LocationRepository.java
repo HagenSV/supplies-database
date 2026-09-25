@@ -53,6 +53,17 @@ public class LocationRepository {
         );
     }
 
+    public void update(Long id, LocationDBO update){
+        jdbc.update("""
+                UPDATE Location
+                SET location_name = ?
+                WHERE location_id = ?
+                """,
+                update.getName(),
+                id
+        );
+    }
+
     public List<LocationDBO> searchByName(String searchQuery){
         return jdbc.query("""
                 SELECT *

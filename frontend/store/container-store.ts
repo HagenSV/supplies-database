@@ -18,10 +18,17 @@ export class ContainerStore {
         this.listeners.forEach(listener => listener())
     }
 
+    getContainers(): Container[] {
+        const values = this.containers.values().toArray();
+
+        return values;
+    }
+
     async createContainer(category: Omit<Container,"category_id">): Promise<void>{
         const created = await ContainerApi.createContainer(category);
         
         this.containers.set(created.container_id, created);
+        this.notify();
     }
     
     async getContainer(id: number): Promise<Container | null> {
@@ -36,12 +43,12 @@ export class ContainerStore {
         const request = ContainerApi.getContainer(id)
             .then( c => {
                 this.containers.set(c.container_id, c);
+                this.notify();
                 return c;
             })
             .finally( () => this.requests.delete(id) );
 
         this.requests.set(id,request);
-
         return request;
     }
     
@@ -58,5 +65,6 @@ export class ContainerStore {
         const deleted = await ContainerApi.deleteContainer(id);
         if (!deleted) return;
         this.containers.delete(id);
+        this.notify();
     }
 }

@@ -1,5 +1,6 @@
 package dev.hagensv.api.controllers;
 
+import dev.hagensv.data.ContainerDBO;
 import dev.hagensv.data.LocationDBO;
 import dev.hagensv.data.access.LocationRepository;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +29,11 @@ public class LocationController {
     @GetMapping("/{id}")
     public LocationDBO getLocation(@PathVariable Long id){
         return locationRepository.getById(id);
+    }
+
+    @PutMapping("/{id}")
+    public void updateContainer(@PathVariable Long id, @RequestBody LocationDBO location){
+        locationRepository.update(id, location);
     }
 
     @DeleteMapping("/{id}")

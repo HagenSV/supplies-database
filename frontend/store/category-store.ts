@@ -4,13 +4,15 @@ import { Category } from "@/data/category";
 export class CategoryStore {
     private categories = new Map<number, Category>();
     private requests = new Map<number, Promise<Category>>();
-    private listeners = new Set<() => void>();
+    private listeners: (() => void)[] = [];
 
     subscribe = (listener: () => void) => {
-        this.listeners.add(listener);
+        this.listeners.push(listener);
+
+        listener();
 
         return () => {
-            this.listeners.delete(listener);
+            this.listeners.filter(l => l !== listener);
         }
     }
 
@@ -18,10 +20,24 @@ export class CategoryStore {
         this.listeners.forEach(listener => listener())
     }
 
+    constructor(){
+        CategoryApi.getCategories()
+            .then( c => {
+                this.categories = new Map(c.map( c => [c.category_id, c]))
+                this.notify();
+            })
+    }
+
+    getCategories(): Category[] {
+        const values = this.categories.values().toArray();
+        return values;
+    }
+
     async createCategory(category: Omit<Category,"category_id">): Promise<void>{
         const created = await CategoryApi.createCategory(category);
         
         this.categories.set(created.category_id, created);
+        this.notify();
     }
     
     async getCategory(id: number): Promise<Category | null> {
@@ -36,6 +52,7 @@ export class CategoryStore {
         const request = CategoryApi.getCategory(id)
             .then( c => {
                 this.categories.set(c.category_id, c);
+                this.notify();
                 return c;
             })
             .finally( () => this.requests.delete(id) );
@@ -45,18 +62,16 @@ export class CategoryStore {
         return request;
     }
     
-    async editCategory(id: number, data: Category): Promise<void> {
-        //UPDATE api
-        // setCategories( current => {
-        //     const next = new Map(current);
-        //     next.set(id, data);
-        //     return next;
-        // })
+    async updateCategory(data: Category): Promise<void> {
+        await CategoryApi.updateCategory(data);
+        this.categories.set(data.category_id, data);
+        this.notify();
     }
     
     async deleteCategory(id: number): Promise<void> {
         const deleted = await CategoryApi.deleteCategory(id);
         if (!deleted) return;
         this.categories.delete(id);
+        this.notify();
     }
 }

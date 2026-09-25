@@ -1,7 +1,7 @@
 'use client';
 
 import { ContainerStore } from "@/store/container-store";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useSyncExternalStore } from "react";
 
 const ContainerStoreContext = createContext<ContainerStore | null>(null)
 
@@ -20,5 +20,7 @@ export function useContainerStore(){
         throw new Error("useContainerStore must be used within a ContainerStoreProvider")
     }
 
-    return store;
+    const snapshot = useSyncExternalStore(store.subscribe, () => store, () => store)
+
+    return snapshot;
 }

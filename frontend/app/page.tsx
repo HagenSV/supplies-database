@@ -1,9 +1,9 @@
 'use client';
 
 import ItemApi from "@/api/item-api";
-import ItemSearchResult from "@/components/ItemSearchResult";
+import ItemSearchResult from "@/components/item/ItemSearchResult";
 import { Item } from "@/data/item";
-import { Box, Button, Divider, Stack, TextField, Typography } from "@mui/material";
+import { Button, Divider, Stack, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 
 export default function Home() {

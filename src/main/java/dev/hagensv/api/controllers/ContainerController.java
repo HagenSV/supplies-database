@@ -29,12 +29,17 @@ public class ContainerController {
     }
 
     @GetMapping("/{id}")
-    public ContainerDBO gettContainer(@PathVariable Long id){
+    public ContainerDBO getContainer(@PathVariable Long id){
         return containerRepository.getById(id);
     }
 
+    @PutMapping("/{id}")
+    public void updateContainer(@PathVariable Long id, @RequestBody ContainerDBO container){
+        containerRepository.update(id, container);
+    }
+
     @DeleteMapping("/{id}")
-    public void deletetContainer(@PathVariable Long id){
+    public void deleteContainer(@PathVariable Long id){
         containerRepository.deleteById(id);
     }
 }

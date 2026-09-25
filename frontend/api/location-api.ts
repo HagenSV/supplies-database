@@ -23,6 +23,9 @@ export default class LocationApi {
         
         const response = await fetch(`${API_BASE_URL}/api/v1/locations`, {
             method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
             body: JSON.stringify(location)
         })
 
@@ -30,6 +33,18 @@ export default class LocationApi {
 
         return json;
     }
+
+    static async updateLocation(location: Location): Promise<void> {
+        
+        const response = await fetch(`${API_BASE_URL}/api/v1/locations/${location.location_id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(location)
+        })
+    }
+
 
     static async deleteLocation(id: number): Promise<boolean> {
         const response = await fetch(`${API_BASE_URL}/api/v1/locations/${id}`,{

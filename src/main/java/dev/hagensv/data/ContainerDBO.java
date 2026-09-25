@@ -10,18 +10,9 @@ public class ContainerDBO {
     @JsonProperty("location_id")
     private final Long location_id;
 
-    private final LocationDBO location;
-
     public ContainerDBO(Long id, Long location_id){
         this.container_id = id;
         this.location_id = location_id;
-        this.location = null;
-    }
-
-    public ContainerDBO(Long id, LocationDBO location){
-        this.container_id = id;
-        this.location_id = location.getId();
-        this.location = location;
     }
 
     @JsonProperty("container_id")
@@ -32,11 +23,6 @@ public class ContainerDBO {
     @JsonProperty("location_id")
     public Long getLocationId(){
         return location_id;
-    }
-
-    @JsonProperty("location")
-    public LocationDBO getLocation(){
-        return location;
     }
 
     @Override

@@ -79,6 +79,19 @@ public class StoredItemRepository {
         );
     }
 
+    public void update(Long id, StoredItemDBO update){
+        jdbc.update("""
+                UPDATE StoredItem
+                SET item_id = ?, container_id = ?, quantity = ?,
+                WHERE stored_item_id = ?
+                """,
+                update.getItem(),
+                update.getContainer(),
+                update.getQuantity(),
+                id
+        );
+    }
+
     public void deleteById(Long id){
         jdbc.update("""
                 DELETE FROM StoredItem

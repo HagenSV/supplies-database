@@ -1,26 +1,17 @@
 'use client'
 
-import CategoryApi from "@/api/category-api";
 import EditCategoryDialog from "@/components/category/EditCategoryDialog";
+import { useCategoryStore } from "@/context/category-store-provider";
 import { Category } from "@/data/category";
 import { DeleteForever, Edit } from "@mui/icons-material";
 import { Box, Button, Divider, IconButton, Stack, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function CategoriesTable(){
 
     const [ dialogOpen, setDialogOpen ] = useState(false)
-    const [ categories, setCategories ] = useState<Category[]>([]);
     const [ selectedCategory, setSelectedCategory ] = useState<Category | undefined>()
-
-    useEffect( () => {
-        loadCategories();
-    }, [])
-
-    const loadCategories = async () => {
-        const categories = await CategoryApi.getCategories();
-        setCategories(categories);
-    }
+    const categoryStore = useCategoryStore();
 
     const createCategory = () => {
         setDialogOpen(true);
@@ -32,7 +23,7 @@ export default function CategoriesTable(){
     }
 
     const deleteCategory = (c: Category) => {
-        CategoryApi.deleteCategory(c.category_id);
+        categoryStore.deleteCategory(c.category_id);
     }
 
     const handleClose = () => {
@@ -41,10 +32,10 @@ export default function CategoriesTable(){
     }
     
     return <Box>
-        <Typography variant="h1">Categories</Typography>
+        <Typography variant="h1">Manage Categories</Typography>
         <Button variant="contained" onClick={createCategory}>Create</Button>
         <Stack direction="column" divider={<Divider orientation="horizontal" flexItem/>}>
-            { categories.map( category => 
+            { categoryStore.getCategories().map( category => 
                 <Stack 
                     key={category.category_id} 
                     direction="row" 

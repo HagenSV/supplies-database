@@ -1,7 +1,7 @@
 'use client';
 
 import { CategoryStore } from "@/store/category-store";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useSyncExternalStore } from "react";
 
 const CategoryStoreContext = createContext<CategoryStore | null>(null)
 
@@ -18,5 +18,7 @@ export function useCategoryStore(){
         throw new Error("useCategoryStore must be used within a CategoryStoreProvider")
     }
 
-    return store;
+    const snapshot = useSyncExternalStore(store.subscribe, () => store)
+
+    return snapshot;
 }

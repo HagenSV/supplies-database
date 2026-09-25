@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import java.awt.*;
 import java.sql.ResultSet;
 import java.util.List;
 
@@ -19,14 +20,6 @@ public class ContainerRepository {
             rs.getLong("location_id")
     );
 
-    private static final RowMapper<ContainerDBO> DEEP_CONTAINER_DBO_ROW_MAPPER = (ResultSet rs, int _) -> new ContainerDBO(
-            rs.getLong("container_id"),
-            new LocationDBO(
-                rs.getLong("location_id"),
-                rs.getString("location_name")
-            )
-    );
-
     public ContainerRepository(JdbcTemplate jdbc){
         this.jdbc = jdbc;
     }
@@ -34,11 +27,9 @@ public class ContainerRepository {
     public List<ContainerDBO> getAll(){
         return jdbc.query("""
                 SELECT *
-                FROM Container
-                LEFT JOIN Location
-                ON Container.location_id = Location.location_id
+                FROM Container 
             """,
-                DEEP_CONTAINER_DBO_ROW_MAPPER
+                CONTAINER_DBO_ROW_MAPPER
         );
     }
 
@@ -60,6 +51,17 @@ public class ContainerRepository {
                 WHERE container_id = ?
             """,
                 CONTAINER_DBO_ROW_MAPPER,
+                id
+        );
+    }
+
+    public void update(Long id, ContainerDBO update){
+        jdbc.update("""
+                UPDATE Container
+                SET location_id = ?
+                WHERE container_id = ?
+                """,
+                update.getLocationId(),
                 id
         );
     }

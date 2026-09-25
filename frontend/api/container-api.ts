@@ -23,12 +23,26 @@ export default class ContainerApi {
         
         const response = await fetch(`${API_BASE_URL}/api/v1/containers`, {
             method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
             body: JSON.stringify(container)
         })
 
         const json = await response.json() as Container;
 
         return json;
+    }
+
+    static async updateContainer(container: Container) {
+        
+        const response = await fetch(`${API_BASE_URL}/api/v1/containers/${container.container_id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(container)
+        })
     }
 
     static async deleteContainer(id: number): Promise<boolean> {

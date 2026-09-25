@@ -1,6 +1,6 @@
 "use client";
 
-import CategoryApi from "@/api/category-api";
+import { useCategoryStore } from "@/context/category-store-provider";
 import { Category } from "@/data/category";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -15,13 +15,14 @@ interface Props {
 export default function EditCategoryDialog({ category, open, onClose }: Props) {
 
     const [ categoryName, setCategoryName ] = useState(category?.category_name ?? "")
+    const categoryStore = useCategoryStore();
 
     useEffect( () => {
         setCategoryName(category?.category_name ?? "")
     }, [category])
 
     const createCategory = async () => {
-        await CategoryApi.createCategory({
+        await categoryStore.createCategory({
             category_name: categoryName
         });
 
@@ -29,7 +30,7 @@ export default function EditCategoryDialog({ category, open, onClose }: Props) {
     }
 
     const saveCategory = async () => {
-        await CategoryApi.updateCategory({
+        await categoryStore.updateCategory({
             ...category!,
             category_name: categoryName
         })

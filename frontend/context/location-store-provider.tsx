@@ -1,7 +1,7 @@
 'use client';
 
 import { LocationStore } from "@/store/location-store";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useSyncExternalStore } from "react";
 
 const LocationStoreContext = createContext<LocationStore | null>(null)
 
@@ -20,5 +20,7 @@ export function useLocationStore(){
         throw new Error("useLocationStore must be used within a LocationStoreProvider")
     }
 
-    return store;
+    const snapshot = useSyncExternalStore(store.subscribe, () => store, () => store)
+
+    return snapshot;
 }

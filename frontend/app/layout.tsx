@@ -4,6 +4,7 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import GlobalContext from "@/context/global-context";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "@/context/theme";
+import { Suspense } from "react";
 
 
 export const metadata: Metadata = {
@@ -21,7 +22,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
           <GlobalContext>
+            <Suspense>
             {children}
+            </Suspense>
           </GlobalContext>
           </ThemeProvider>
         </AppRouterCacheProvider>

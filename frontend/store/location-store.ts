@@ -19,41 +19,55 @@ export class LocationStore {
         this.listeners.forEach(listener => listener())
     }
 
+    constructor(){
+        LocationApi.getLocations()
+            .then( c => {
+                this.locations = new Map(c.map( c => [c.location_id, c]))
+                this.notify();
+            })
+    }
+
+    getLocations(): Location[] {
+        return this.locations.values().toArray();
+    }
+
     async createLocation(location: Omit<Location,"location_id">): Promise<void>{
         const created = await LocationApi.createLocation(location);
         
         this.locations.set(created.location_id, created);
     }
     
-    async getLocation(id: number): Promise<Location | null> {
+    getLocation(id: number): Location | null {
         if (id === 0) return null;
 
         const cached = this.locations.get(id);
         if (cached) return cached;
 
         const existingRequest = this.requests.get(id);
-        if (existingRequest) return existingRequest;
+        if (existingRequest) return null;
         
         const request = LocationApi.getLocation(id)
             .then( r => {
                 this.locations.set(r.location_id, r);
+                this.notify();
                 return r;
             })
             .finally( () => this.requests.delete(id) );
 
         this.requests.set(id,request);
-
-        return request;
+        return null;
     }
     
-    async editLocation(id: number, data: Category): Promise<void> {
-        //UPDATE api
-
+    async updateLocation(data: Location): Promise<void> {
+        await LocationApi.updateLocation(data);
+        this.locations.set(data.location_id,data);
+        this.notify();
     }
     
     async deleteLocation(id: number): Promise<void> {
         const deleted = await LocationApi.deleteLocation(id);
         if (!deleted) return;
         this.locations.delete(id);
+        this.notify();
     }
 }

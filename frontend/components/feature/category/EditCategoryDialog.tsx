@@ -59,10 +59,9 @@ export default function EditCategoryDialog({ category, open, onClose }: Props) {
         </DialogContent>
         <DialogActions>
             <Button variant="outlined" onClick={onClose}>Cancel</Button>
-            { category &&
+            { category ?
                 <Button variant="contained" onClick={saveCategory}>Save</Button>
-            }
-            { !category &&
+            :
                 <Button variant="contained" onClick={createCategory}>Create</Button>
             }
         </DialogActions>

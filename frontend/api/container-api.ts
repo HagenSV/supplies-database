@@ -7,7 +7,7 @@ export default class ContainerApi {
         const response = await fetch(`${API_BASE_URL}/api/v1/containers`)
 
         const json = await response.json() as Container[];
-
+        console.log(json)
         return json;
     }
 

@@ -1,5 +1,4 @@
-import ClientOnly from "@/components/ClientOnly";
-import ContainersTable from "@/components/container/ContainersTable";
+import ContainersTable from "@/components/feature/container/ContainersTable";
 
 export default function ManageContainers(){
     return <ContainersTable />

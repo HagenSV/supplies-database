@@ -1,6 +1,6 @@
 'use client'
 
-import EditLocationDialog from "@/components/location/EditLocationDialog";
+import EditLocationDialog from "@/components/feature/location/EditLocationDialog";
 import { useLocationStore } from "@/context/location-store-provider";
 import { Location } from "@/data/location";
 import { DeleteForever, Edit } from "@mui/icons-material";

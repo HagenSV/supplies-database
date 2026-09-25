@@ -1,7 +1,7 @@
 'use client'
 
 import ContainerApi from "@/api/container-api";
-import EditContainerDialog from "@/components/container/EditContainerDialog";
+import EditContainerDialog from "@/components/feature/container/EditContainerDialog";
 import { useContainerStore } from "@/context/container-store-provider";
 import { useLocationStore } from "@/context/location-store-provider";
 import { Container } from "@/data/container";
@@ -42,9 +42,9 @@ export default function ContainersTable(){
                 <Stack 
                     key={container.container_id} 
                     direction="row" 
-                    sx={{ justifyContent: "space-between", alignContainers: "center" }}
+                    sx={{ justifyContent: "space-between", alignItems: "center" }}
                 >
-                    <Typography>{ locationStore.getLocation(container.location_id)?.location_name }</Typography>
+                    <Typography>Box { container.container_id }, { locationStore.getLocation(container.location_id)?.location_name }</Typography>
                     <Stack direction={"row"}>
                     <IconButton onClick={() => editContainer(container)}>
                         <Edit />

@@ -5,12 +5,9 @@ import { createContext, useContext, useState, useSyncExternalStore } from "react
 
 const ContainerStoreContext = createContext<ContainerStore | null>(null)
 
-
 export default function ContainerStoreProvider({ children }: { children: React.ReactNode }){
-
     const [ store ] = useState(new ContainerStore());
     return <ContainerStoreContext value={store} >{ children }</ContainerStoreContext>
-
 }
 
 export function useContainerStore(){
@@ -20,7 +17,7 @@ export function useContainerStore(){
         throw new Error("useContainerStore must be used within a ContainerStoreProvider")
     }
 
-    const snapshot = useSyncExternalStore(store.subscribe, () => store, () => store)
+    const snapshot = useSyncExternalStore(store.subscribe, () => store)
 
     return snapshot;
 }

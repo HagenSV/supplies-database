@@ -5,12 +5,9 @@ import { createContext, useContext, useState, useSyncExternalStore } from "react
 
 const LocationStoreContext = createContext<LocationStore | null>(null)
 
-
 export default function LocationStoreProvider({ children }: { children: React.ReactNode }){
-
     const [ store ] = useState(new LocationStore());
     return <LocationStoreContext value={store} >{ children }</LocationStoreContext>
-
 }
 
 export function useLocationStore(){
@@ -20,7 +17,7 @@ export function useLocationStore(){
         throw new Error("useLocationStore must be used within a LocationStoreProvider")
     }
 
-    const snapshot = useSyncExternalStore(store.subscribe, () => store, () => store)
+    const snapshot = useSyncExternalStore(store.subscribe, () => store)
 
     return snapshot;
 }

@@ -6,7 +6,7 @@ import { StoredItem } from "@/data/stored_item";
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import { Box, Divider, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import StoredItemResult from "../StoredItemResult";
+import StoredItemResult from "../../StoredItemResult";
 import { useCategoryStore } from "@/context/category-store-provider";
 import { Category } from "@/data/category";
 
@@ -53,21 +53,20 @@ export default function ItemSearchResult({ item }: Props) {
     }
 
 
-    return <Box className="p-3">
+    return <Box sx={{ paddingTop: 2 }}>
         <Box onClick={onClick}>
             <Stack direction="row" sx={{ justifyContent: "space-between"}}>
                 <Box>
                     <Typography variant="body1" className="font-bold">{ item.item_name }</Typography>
                     <Typography>Category: { category?.category_name ?? "Uncategorized" }</Typography>
                   </Box>
-                { open && <ArrowDropUp fontSize="large" /> }
-                { !open && <ArrowDropDown fontSize="large" /> }
+                { open ? <ArrowDropUp fontSize="large" /> : <ArrowDropDown fontSize="large" /> }
             </Stack>
         </Box>
         <Stack
             direction="column"
             divider={<Divider orientation="horizontal" flexItem/>} 
-            className={`${open ? "block" : "hidden"} pt-5 px-5`}
+            sx={{ maxHeight: open ? undefined : 0, paddingY: 2, paddingX: 5, overflow: "hidden" }}
         >
             { loading == LoadState.LOADING &&
                 <Typography variant="body2">Loading...</Typography>

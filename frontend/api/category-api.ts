@@ -1,21 +1,22 @@
 import { API_BASE_URL } from "./config";
 import { Category } from "@/data/category";
+import CrudApi from "./crud-api";
 
-export default class CategoryApi {
+export default class CategoryApi implements CrudApi<Category, "category_id"> {
 
-    static async getCategories(): Promise<Category[]> {
+    async getAll(): Promise<Category[]> {
         const response = await fetch(`${API_BASE_URL}/api/v1/categories`)
         const json = await response.json() as Category[];
         return json;
     }
 
-    static async getCategory(id: number): Promise<Category> {
-        const response = await fetch(`${API_BASE_URL}/api/v1/categories/${id}`)
-        const json = await response.json() as Category;
+    async search(query: Partial<Omit<Category,"category_id">>): Promise<Category[]> {
+        const response = await fetch(`${API_BASE_URL}/api/v1/categories`)
+        const json = await response.json() as Category[];
         return json;
     }
     
-    static async createCategory(category: Omit<Category,"category_id">): Promise<Category> {
+    async create(category: Omit<Category,"category_id">): Promise<Category> {
         const response = await fetch(`${API_BASE_URL}/api/v1/categories`, {
             method: "POST",
             headers: {
@@ -27,7 +28,13 @@ export default class CategoryApi {
         return json;
     }
 
-    static async updateCategory(category: Category): Promise<void> {
+    async get(id: number): Promise<Category> {
+        const response = await fetch(`${API_BASE_URL}/api/v1/categories/${id}`)
+        const json = await response.json() as Category;
+        return json;
+    }
+
+    async update(category: Category): Promise<boolean> {
         const response = await fetch(`${API_BASE_URL}/api/v1/categories/${category.category_id}`, {
             method: "PUT",
             headers: {
@@ -35,9 +42,11 @@ export default class CategoryApi {
             },
             body: JSON.stringify(category)
         })
+
+        return response.ok
     }
 
-    static async deleteCategory(id: number): Promise<boolean> {
+    async delete(id: number): Promise<boolean> {
         const response = await fetch(`${API_BASE_URL}/api/v1/categories/${id}`,{
             method: "DELETE"
         })

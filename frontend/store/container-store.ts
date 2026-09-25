@@ -9,6 +9,8 @@ export class ContainerStore {
     subscribe = (listener: () => void) => {
         this.listeners.add(listener);
 
+        listener()
+
         return () => {
             this.listeners.delete(listener);
         }
@@ -18,13 +20,21 @@ export class ContainerStore {
         this.listeners.forEach(listener => listener())
     }
 
+    constructor(){
+        ContainerApi.getContainers()
+            .then( c => {
+                this.containers = new Map(c.map( c => [c.container_id, c]))
+                this.notify();
+            })
+    }
+
     getContainers(): Container[] {
         const values = this.containers.values().toArray();
 
         return values;
     }
 
-    async createContainer(category: Omit<Container,"category_id">): Promise<void>{
+    async createContainer(category: Omit<Container,"container_id">): Promise<void>{
         const created = await ContainerApi.createContainer(category);
         
         this.containers.set(created.container_id, created);
@@ -52,13 +62,9 @@ export class ContainerStore {
         return request;
     }
     
-    async editContainer(id: number, data: Container): Promise<void> {
-        //UPDATE api
-        // setCategories( current => {
-        //     const next = new Map(current);
-        //     next.set(id, data);
-        //     return next;
-        // })
+    async editContainer(data: Container): Promise<void> {
+        ContainerApi.updateContainer(data);
+        this.containers.set(data.container_id, data);
     }
     
     async deleteContainer(id: number): Promise<void> {

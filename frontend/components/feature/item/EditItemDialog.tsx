@@ -1,10 +1,10 @@
 "use client";
 
-import CategoryApi from "@/api/category-api";
-import ItemApi from "@/api/item-api";
+import { useCategoryStore } from "@/context/category-store-provider";
+import { useItemStore } from "@/context/item-store-provider";
 import { Category } from "@/data/category";
 import { Item } from "@/data/item";
-import { Autocomplete, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
+import { Autocomplete, Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 
 interface Props {
@@ -17,13 +17,10 @@ interface Props {
 export default function EditItemDialog({ item, open, onClose }: Props) {
 
     const [ itemName, setItemName ] = useState(item?.item_name ?? "")
-    const [ categories, setCategories ] = useState<Category[]>([])
     const [ category, setCategory ] = useState<Category | null>(null)
 
-
-    useEffect( () => {
-        CategoryApi.getCategories().then( c => setCategories(c))
-    }, [])
+    const categoryStore = useCategoryStore();
+    const itemStore = useItemStore();
 
     useEffect( () => {
 
@@ -34,12 +31,12 @@ export default function EditItemDialog({ item, open, onClose }: Props) {
             return;
         }
         
-        CategoryApi.getCategory(item?.category_id).then( c => setCategory(c))
+        categoryStore.getCategory(item?.category_id).then( c => setCategory(c))
 
     }, [item])
 
     const createItem = async () => {
-        await ItemApi.create({
+        await itemStore.create({
             item_name: itemName,
             category_id: category?.category_id
         });
@@ -48,7 +45,7 @@ export default function EditItemDialog({ item, open, onClose }: Props) {
     }
 
     const saveItem = async () => {
-        await ItemApi.update({
+        await itemStore.update({
             ...item!,
             item_name: itemName,
             category_id: category?.category_id
@@ -67,29 +64,29 @@ export default function EditItemDialog({ item, open, onClose }: Props) {
         <DialogTitle>{ item ? "Edit" : "Create" } Item</DialogTitle>
 
         <DialogContent>
-            <TextField 
-                label="Item Name"
-                value={itemName}
-                fullWidth={true}
-                onChange={(event) => setItemName(event.target.value)}
-                sx={{ marginTop: 1 }}
-            />
-            <Autocomplete
-                options={categories}
-                value={category}
-                onChange={(event, newValue) => setCategory(newValue)}
-                getOptionLabel={o => o.category_name}
-                getOptionKey={o => o.category_id}
-                renderInput={(params) => <TextField {...params} label="Category (Optional)"/>}
-            />
-
+            <Stack direction="column" spacing={2} sx={{ paddingTop: 1 }}>
+                <TextField 
+                    label="Item Name"
+                    value={itemName}
+                    fullWidth={true}
+                    onChange={(event) => setItemName(event.target.value)}
+                    sx={{ marginTop: 1 }}
+                />
+                <Autocomplete
+                    options={categoryStore.getCategories()}
+                    value={category}
+                    onChange={(event, newValue) => setCategory(newValue)}
+                    getOptionLabel={o => o.category_name}
+                    getOptionKey={o => o.category_id}
+                    renderInput={(params) => <TextField {...params} label="Category (Optional)"/>}
+                />
+            </Stack>
         </DialogContent>
         <DialogActions>
             <Button variant="outlined" onClick={onClose}>Cancel</Button>
-            { item &&
+            { item ?
                 <Button variant="contained" onClick={saveItem}>Save</Button>
-            }
-            { !item &&
+            :
                 <Button variant="contained" onClick={createItem}>Create</Button>
             }
         </DialogActions>

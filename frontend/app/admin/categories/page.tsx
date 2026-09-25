@@ -1,6 +1,5 @@
-import CategoriesTable from "@/components/category/CategoriesTable";
-import ClientOnly from "@/components/ClientOnly";
+import CategoriesTable from "@/components/feature/category/CategoriesTable";
 
 export default function ManageCategories(){
-    return <ClientOnly><CategoriesTable /></ClientOnly>
+    return <CategoriesTable />
 }

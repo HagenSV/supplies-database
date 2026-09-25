@@ -1,6 +1,5 @@
-import ClientOnly from "@/components/ClientOnly";
-import LocationsTable from "@/components/location/LocationsTable";
+import LocationsTable from "@/components/feature/location/LocationsTable";
 
 export default function ManageLocations(){
-    return <ClientOnly><LocationsTable /></ClientOnly>
+    return <LocationsTable />
 }

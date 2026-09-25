@@ -1,26 +1,18 @@
 'use client'
 
-import ItemApi from "@/api/item-api";
-import EditItemDialog from "@/components/item/EditItemDialog";
+import EditItemDialog from "@/components/feature/item/EditItemDialog";
+import { useItemStore } from "@/context/item-store-provider";
 import { Item } from "@/data/item";
 import { DeleteForever, Edit } from "@mui/icons-material";
 import { Box, Button, Divider, IconButton, Stack, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function ItemsTable(){
 
     const [ dialogOpen, setDialogOpen ] = useState(false)
-    const [ items, setItems ] = useState<Item[]>([]);
     const [ selectedItem, setSelectedItem ] = useState<Item | undefined>()
 
-    useEffect( () => {
-        loadItems();
-    }, [])
-
-    const loadItems = async () => {
-        const items = await ItemApi.getItems();
-        setItems(items);
-    }
+    const itemStore = useItemStore();
 
     const createItem = () => {
         setDialogOpen(true);
@@ -32,7 +24,7 @@ export default function ItemsTable(){
     }
 
     const deleteItem = (c: Item) => {
-        ItemApi.delete(c.item_id);
+        itemStore.delete(c.item_id);
     }
 
     const handleClose = () => {
@@ -44,7 +36,7 @@ export default function ItemsTable(){
         <Typography variant="h1">Manage Items</Typography>
         <Button variant="contained" onClick={createItem}>Create</Button>
         <Stack direction="column" divider={<Divider orientation="horizontal" flexItem/>}>
-            { items.map( item => 
+            { itemStore.getAll().map( item => 
                 <Stack 
                     key={item.item_id} 
                     direction="row" 

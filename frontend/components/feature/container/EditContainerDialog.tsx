@@ -2,6 +2,7 @@
 
 import ContainerApi from "@/api/container-api";
 import LocationApi from "@/api/location-api";
+import { useLocationStore } from "@/context/location-store-provider";
 import { Container } from "@/data/container";
 import { Location } from "@/data/location";
 import { Autocomplete, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
@@ -15,14 +16,9 @@ interface Props {
 
 
 export default function EditContainerDialog({ container, open, onClose }: Props) {
-
-    const [ locations, setLocations ] = useState<Location[]>([])
     const [ location, setLocation ] = useState<Location | null>(null)
 
-
-    useEffect( () => {
-        LocationApi.getLocations().then( c => setLocations(c))
-    }, [])
+    const locationStore = useLocationStore();
 
     useEffect( () => {
 
@@ -63,7 +59,7 @@ export default function EditContainerDialog({ container, open, onClose }: Props)
 
         <DialogContent>
             <Autocomplete
-                options={locations}
+                options={locationStore.getLocations()}
                 value={location}
                 onChange={(event, newValue) => setLocation(newValue)}
                 getOptionLabel={o => o.location_name}
@@ -74,10 +70,9 @@ export default function EditContainerDialog({ container, open, onClose }: Props)
         </DialogContent>
         <DialogActions>
             <Button variant="outlined" onClick={onClose}>Cancel</Button>
-            { container &&
+            { container ?
                 <Button variant="contained" onClick={saveContainer} disabled={!location}>Save</Button>
-            }
-            { !container &&
+            :
                 <Button variant="contained" onClick={createContainer} disabled={!location}>Create</Button>
             }
         </DialogActions>

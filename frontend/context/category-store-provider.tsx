@@ -1,14 +1,14 @@
 'use client';
 
+import CategoryApi from "@/api/category-api";
 import { CategoryStore } from "@/store/category-store";
 import { createContext, useContext, useState, useSyncExternalStore } from "react";
 
 const CategoryStoreContext = createContext<CategoryStore | null>(null)
 
 export default function CategoryStoreProvider({ children }: { children: React.ReactNode }){
-    const [ store ] = useState(new CategoryStore());  
+    const [ store ] = useState(new CategoryStore(new CategoryApi()));  
     return <CategoryStoreContext value={store} >{ children }</CategoryStoreContext>
-
 }
 
 export function useCategoryStore(){

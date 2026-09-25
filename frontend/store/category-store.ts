@@ -20,8 +20,8 @@ export class CategoryStore {
         this.listeners.forEach(listener => listener())
     }
 
-    constructor(){
-        CategoryApi.getCategories()
+    constructor(private api: CategoryApi){
+        this.api.getAll()
             .then( c => {
                 this.categories = new Map(c.map( c => [c.category_id, c]))
                 this.notify();
@@ -34,7 +34,7 @@ export class CategoryStore {
     }
 
     async createCategory(category: Omit<Category,"category_id">): Promise<void>{
-        const created = await CategoryApi.createCategory(category);
+        const created = await this.api.create(category);
         
         this.categories.set(created.category_id, created);
         this.notify();
@@ -49,7 +49,7 @@ export class CategoryStore {
         const existingRequest = this.requests.get(id);
         if (existingRequest) return existingRequest;
         
-        const request = CategoryApi.getCategory(id)
+        const request = this.api.get(id)
             .then( c => {
                 this.categories.set(c.category_id, c);
                 this.notify();
@@ -63,13 +63,13 @@ export class CategoryStore {
     }
     
     async updateCategory(data: Category): Promise<void> {
-        await CategoryApi.updateCategory(data);
+        await this.api.update(data);
         this.categories.set(data.category_id, data);
         this.notify();
     }
     
     async deleteCategory(id: number): Promise<void> {
-        const deleted = await CategoryApi.deleteCategory(id);
+        const deleted = await this.api.delete (id);
         if (!deleted) return;
         this.categories.delete(id);
         this.notify();

@@ -1,6 +1,6 @@
 'use client'
 
-import EditCategoryDialog from "@/components/category/EditCategoryDialog";
+import EditCategoryDialog from "@/components/feature/category/EditCategoryDialog";
 import { useCategoryStore } from "@/context/category-store-provider";
 import { Category } from "@/data/category";
 import { DeleteForever, Edit } from "@mui/icons-material";

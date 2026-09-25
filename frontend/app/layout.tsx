@@ -5,6 +5,7 @@ import GlobalContext from "@/context/global-context";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "@/context/theme";
 import { Suspense } from "react";
+import LayoutContainer from "@/components/core/layout/LayoutContainer";
 
 
 export const metadata: Metadata = {
@@ -18,12 +19,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col p-6 bg-lime-50">
+      <body>
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
           <GlobalContext>
             <Suspense>
-            {children}
+              <LayoutContainer>
+                {children}
+              </LayoutContainer>
             </Suspense>
           </GlobalContext>
           </ThemeProvider>

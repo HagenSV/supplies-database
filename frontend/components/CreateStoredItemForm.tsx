@@ -1,6 +1,6 @@
-import ContainerApi from "@/api/container-api";
-import ItemApi from "@/api/item-api";
 import StoredItemApi from "@/api/stored-item-api";
+import { useContainerStore } from "@/context/container-store-provider";
+import { useItemStore } from "@/context/item-store-provider";
 import { Container } from "@/data/container";
 import { Item } from "@/data/item";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -9,27 +9,15 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function CreateStoredItemForm(){
-    const [items, setItems] = useState<Item[]>([])
-    const [containers, setContainers] = useState<Container[]>([])
+    const itemStore = useItemStore()
+    const containerStore = useContainerStore()
 
     const [selectedItem, setSelectedItem] = useState<Item | null>(null);
     const [selectedContainer, setSelectedContainer] = useState<Container | null>(null);
     const [quantity, setQuantity] = useState(1);
-
-    useEffect( () => {
-        fetchData();
-    }, [])
-
-    const fetchData = async () => {
-        const items = await ItemApi.getItems();
-        setItems(items);
-
-        const containers = await ContainerApi.getContainers();
-        setContainers(containers);
-    }
 
     const saveItem = async () => {
         if (!selectedItem || !selectedContainer || quantity < 1){
@@ -55,7 +43,7 @@ export default function CreateStoredItemForm(){
 
         <Stack direction="column" spacing={2}>
             <Autocomplete 
-                options={items}
+                options={itemStore.getAll()}
                 value={selectedItem}
                 onChange={(event, newValue) => setSelectedItem(newValue)}
                 getOptionLabel={o => o.item_name}
@@ -64,10 +52,10 @@ export default function CreateStoredItemForm(){
             />
 
             <Autocomplete 
-                options={containers}
+                options={containerStore.getContainers()}
                 value={selectedContainer}
                 onChange={(event, newValue) => setSelectedContainer(newValue)}
-                getOptionLabel={o => `Box ${o.container_id}, ${o.location?.location_name ?? o.location_id}`}
+                getOptionLabel={o => `Box ${o.container_id}, ${o.location_id}`}
                 getOptionKey={o => o.container_id}
                 renderInput={(params) => <TextField {...params} label="Container"/>}
             />

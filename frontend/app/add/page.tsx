@@ -1,33 +1,23 @@
 'use client';
 
-import ContainerApi from "@/api/container-api";
-import ItemApi from "@/api/item-api";
 import StoredItemApi from "@/api/stored-item-api";
+import { useContainerStore } from "@/context/container-store-provider";
+import { useItemStore } from "@/context/item-store-provider";
+import { useLocationStore } from "@/context/location-store-provider";
 import { Container } from "@/data/container";
 import { Item } from "@/data/item";
 import { Autocomplete, Box, Button, Stack, TextField, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function AddItem(){
-
-    const [items, setItems] = useState<Item[]>([])
-    const [containers, setContainers] = useState<Container[]>([])
 
     const [selectedItem, setSelectedItem] = useState<Item | null>(null);
     const [selectedContainer, setSelectedContainer] = useState<Container | null>(null);
     const [quantity, setQuantity] = useState(1);
 
-    useEffect( () => {
-        fetchData();
-    }, [])
-
-    const fetchData = async () => {
-        const items = await ItemApi.getItems();
-        setItems(items);
-
-        const containers = await ContainerApi.getContainers();
-        setContainers(containers);
-    }
+    const itemStore = useItemStore();
+    const containerStore = useContainerStore();
+    const locationStore = useLocationStore();
 
     const saveItem = async () => {
         if (!selectedItem || !selectedContainer || quantity < 1){
@@ -53,7 +43,7 @@ export default function AddItem(){
 
         <Stack direction="column" spacing={2}>
             <Autocomplete 
-                options={items}
+                options={itemStore.getAll()}
                 value={selectedItem}
                 onChange={(event, newValue) => setSelectedItem(newValue)}
                 getOptionLabel={o => o.item_name}
@@ -62,10 +52,10 @@ export default function AddItem(){
             />
 
             <Autocomplete 
-                options={containers}
+                options={containerStore.getContainers()}
                 value={selectedContainer}
                 onChange={(event, newValue) => setSelectedContainer(newValue)}
-                getOptionLabel={o => `Box ${o.container_id}, ${o.location?.location_name ?? o.location_id}`}
+                getOptionLabel={o => `Box ${o.container_id}, ${locationStore.getLocation(o.location_id)?.location_name ?? o.location_id}`}
                 getOptionKey={o => o.container_id}
                 renderInput={(params) => <TextField {...params} label="Container"/>}
             />

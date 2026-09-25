@@ -1,13 +1,15 @@
 'use client';
 
 import ItemApi from "@/api/item-api";
-import ItemSearchResult from "@/components/item/ItemSearchResult";
+import ItemSearchResult from "@/components/feature/item/ItemSearchResult";
+import { useItemStore } from "@/context/item-store-provider";
 import { Item } from "@/data/item";
 import { Button, Divider, Stack, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 
 export default function Home() {
 
+  const itemStore = useItemStore();
 
   const [ search, setSearch ] = useState("");
   const [ items, setItems ] = useState<Item[]>([]);
@@ -16,8 +18,7 @@ export default function Home() {
   useEffect(() => {
 
     const fetch = async () => {
-      const data = await ItemApi.getItems();
-
+      const data = itemStore.getAll();
       setItems(data);
     }
 
@@ -28,7 +29,7 @@ export default function Home() {
   const searchItems = async (query: string) => {
     setSearch(query);
 
-    const data = await ItemApi.searchItems(query);
+    const data = await itemStore.search({ item_name: query });
     setItems(data);
   }
 
@@ -50,7 +51,7 @@ export default function Home() {
       </Stack>
 
       <Typography variant="h2">Results</Typography>
-      <Stack className="px-20" direction="column" divider={<Divider orientation="horizontal" flexItem/>}>
+      <Stack direction="column" divider={<Divider orientation="horizontal" flexItem/>}>
         { items.map( item => <ItemSearchResult key={item.item_id} item={item} /> ) }
       </Stack>
     </Stack>    

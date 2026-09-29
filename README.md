@@ -10,6 +10,8 @@ Where we run into problems is that other prospective camp directors don't know w
 
 This supplies database is just once piece of a larger puzzle to help improve our church camp management. With this program, not only can we have a convenient system to keep track of Presbytery supplies, we can also have a reservation system with item checkin and checkout with audit logs to know who last had an item when it goes missing.
 
+# Long-Term Plans
+
 Once the supplies database is complete, I would like to expand the application with more utilities.
 
 My mom spends a lot of time carefully crafting teams to ensure that they are balanced in many ways, I would like to design an algorithm to to most of the heavy lifting.
